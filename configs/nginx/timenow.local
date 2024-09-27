@@ -1,0 +1,23 @@
+server {
+	listen 443; 
+	listen [::]:443;
+
+	root /var/www/timenow; 
+
+	server_name timenow.local;
+
+	location /api/ { 
+		proxy_pass http://localhost:8080/;
+		add_header Access-Control-Allow-Origin http://timenow.local/api;
+	}
+
+	ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt; 
+	ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+}
+
+server { 
+	listen 80; 
+	listen [::]:80;
+
+	return 301 https://timenow.local$request_uri;
+}
